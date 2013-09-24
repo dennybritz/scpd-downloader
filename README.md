@@ -1,6 +1,6 @@
 # Stanford SCPD Lecture Downloader
 
-Downloads lecture videos from [https://myvideosu.stanford.edu/oce/currentquarter.aspx](https://myvideosu.stanford.edu/oce/currentquarter.aspx). You need a valid Stanford SUNet ID. Supports two-way authentication. Stanford limits the streaming bandwith to ~100kb/sec, so downloading lectures may take a while.
+Downloads lecture videos from [https://myvideosu.stanford.edu/oce/currentquarter.aspx](https://myvideosu.stanford.edu/oce/currentquarter.aspx). You need a valid Stanford SUNet ID. Supports two-step authentication. Stanford limits the streaming bandwith to ~100kb/sec, so downloading lectures may take a while.
 
 ## System requirements
 

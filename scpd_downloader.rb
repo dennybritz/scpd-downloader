@@ -30,9 +30,9 @@ login_form.checkboxes.first.checked = true
 puts "\nLogging in..."
 page = agent.submit(login_form, login_form.buttons.first)
 
-# If asked for two-way authentication
+# If asked for two-step authentication
 if page.content =~ /Two-step authentication/
-  print "Two-way authentication code: "
+  print "Two-step authentication code: "
   login_form = page.form("login")
   login_form.otp = gets.strip
   page = agent.submit(login_form, login_form.buttons.first)
