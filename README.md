@@ -12,9 +12,9 @@ Downloads lecture videos from [https://myvideosu.stanford.edu/oce/currentquarter
 ## Usage
 
 ```shell
-./scpd_downloader [course] [lecture_number] [filename]
+./scpd_downloader.rb [course] [lecture_number] [filename]
 ```
 For example:
 ```shell
-./scpd_downloader cs229 1 cs229-01.wmv
+./scpd_downloader.rb cs229 1 cs229-01.wmv
 ```
