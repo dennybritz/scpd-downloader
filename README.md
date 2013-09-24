@@ -2,6 +2,8 @@
 
 Downloads lecture videos from [https://myvideosu.stanford.edu/oce/currentquarter.aspx](https://myvideosu.stanford.edu/oce/currentquarter.aspx). You need a valid Stanford SUNet ID. Supports two-step authentication. Stanford limits the streaming bandwith to ~100kb/sec, so downloading lectures may take a while.
 
+I wrote this script in a hurry, so there is absolutely no error handling. This means it'll crash if you give it a wrong lecture number, course, or login credentials. Garbage in, garbage out. Pull requests are welcome.
+
 ## System requirements
 
 - Ruby 1.9.3 or higher (I recommend using [rbenv](https://github.com/sstephenson/rbenv))
