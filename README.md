@@ -20,3 +20,13 @@ For example:
 ```shell
 ./scpd_downloader.rb cs229 1 cs229-01.wmv
 ```
+
+## TODO
+
+- Error handling in case of:
+  - Incorrect login credentials
+  - Incorrect two-step authentication code
+  - Incorrect course name
+  - Incorrect lecture number
+- Specifying "last" as a lecture number should translate the lecture number to -1
+
