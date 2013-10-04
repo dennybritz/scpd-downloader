@@ -4,6 +4,8 @@ Downloads lecture videos from [https://myvideosu.stanford.edu/oce/currentquarter
 
 I wrote this script in a hurry, so there is absolutely no error handling. This means it'll crash if you give it a wrong lecture number, course, or login credentials. Garbage in, garbage out. Pull requests are welcome.
 
+**Distributing SCPD lectures is against the terms of service. This script is for private use only!**
+
 ## System requirements
 
 - Ruby 1.9.3 or higher (I recommend using [rbenv](https://github.com/sstephenson/rbenv))
