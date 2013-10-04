@@ -10,10 +10,10 @@ require "io/console"
 BASE_URL = "https://myvideosu.stanford.edu/"
 CURRENT_QUARTER_URL = "https://myvideosu.stanford.edu/oce/currentquarter.aspx"
 COURSE = ARGV.shift
-LECTURE_NUM = (ARGV.shift || 1).to_i
+LECTURE_NUM = (ARGV.shift || 1).to_i - 1
 FILENAME = ARGV.shift || "output.wmv"
 
-puts "Downloading lecture #{LECTURE_NUM} for course #{COURSE}"
+puts "Downloading lecture #{LECTURE_NUM + 1} for course #{COURSE}"
 
 agent = Mechanize.new
 agent.user_agent_alias = "Mac Safari"
@@ -43,7 +43,7 @@ course_url = page.content  =~ /href=\"(.*#{COURSE}.*?)\"/i && (BASE_URL + $1)
 page = agent.get(course_url)
 
 # Visit the player page for the specified lecture
-page.links.select { |link| link.text == "SL"}[LECTURE_NUM - 1].href =~ /javascript:openSL\((.*?)\);/ 
+page.links.select { |link| link.text == "SL"}.reverse[LECTURE_NUM].href =~ /javascript:openSL\((.*?)\);/ 
 coll, course, co, lecture, lectureDesc, authtype, playerType = *($1.gsub("\"","").split(","))
 
 # Get the SLP hash for authentication via JSON request
@@ -55,4 +55,4 @@ page = agent.get(player_url)
 
 # Get the video URL and download using mimms
 video_url = page.content =~ /(mms:\/\/.*\.wmv)/ && $1
-return system("mimms -r #{video_url} #{FILENAME}")
+system("ffmpeg -i #{video_url.gsub("mms","mmsh")} #{FILENAME}")
