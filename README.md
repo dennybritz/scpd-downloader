@@ -1,6 +1,6 @@
 # Stanford SCPD Lecture Downloader
 
-Downloads lecture videos from [https://myvideosu.stanford.edu/oce/currentquarter.aspx](https://myvideosu.stanford.edu/oce/currentquarter.aspx). You need a valid Stanford SUNet ID. Supports two-step authentication. Videos are streamed, so downloading lectures may take a while.
+Downloads lecture videos from [https://myvideosu.stanford.edu/oce/currentquarter.aspx](https://myvideosu.stanford.edu/oce/currentquarter.aspx). **You need a valid Stanford SUNet ID.** Supports two-step authentication. Videos are streamed, so downloading lectures may take a while.
 
 I wrote this script in a hurry, so there is absolutely no error handling. This means it'll crash if you give it a wrong lecture number, course, or login credentials. Garbage in, garbage out. Pull requests are welcome.
 
