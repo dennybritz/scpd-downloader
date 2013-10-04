@@ -30,5 +30,3 @@ For example:
   - Incorrect two-step authentication code
   - Incorrect course name
   - Incorrect lecture number
-- Specifying "last" as a lecture number should translate the lecture number to -1
-
