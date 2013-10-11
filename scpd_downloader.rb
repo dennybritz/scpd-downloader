@@ -18,22 +18,25 @@ puts "Downloading lecture #{LECTURE_NUM + 1} for course #{COURSE}"
 agent = Mechanize.new
 agent.user_agent_alias = "Mac Safari"
 agent.robots = false
-page = agent.get(CURRENT_QUARTER_URL)
 
 # Load cookies if available
 if File.exist?("cookies")
   agent.cookie_jar.load "cookies", session: true, format: :yaml
 end
 
+page = agent.get(CURRENT_QUARTER_URL)
+
 # Fill out the login form
-login_form = page.form("login")
-print "SUNet ID: "
-login_form.username = gets.strip
-print "SUNet Password: "
-login_form.password = STDIN.noecho(&:gets).strip
-login_form.checkboxes.first.checked = true
-puts "\nLogging in..."
-page = agent.submit(login_form, login_form.buttons.first)
+if page.form("login")
+  login_form = page.form("login")
+  print "SUNet ID: "
+  login_form.username = gets.strip
+  print "SUNet Password: "
+  login_form.password = STDIN.noecho(&:gets).strip
+  login_form.checkboxes.first.checked = true
+  puts "\nLogging in..."
+  page = agent.submit(login_form, login_form.buttons.first)
+end
 
 # If asked for two-step authentication
 if page.content =~ /Two-step authentication/
