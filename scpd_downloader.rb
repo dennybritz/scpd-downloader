@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby
 
 # Usage: ./scpd_downloader [course] [lecture_num] [filename]
-# Usage: ./scpd_downloader cs229 1 cs229-01.wmv
+# Usage: ./scpd_downloader cs229 1 cs229-01.mp4
 
 require "mechanize"
 require "json"
@@ -11,7 +11,7 @@ BASE_URL = "https://myvideosu.stanford.edu/"
 CURRENT_QUARTER_URL = "https://myvideosu.stanford.edu/oce/currentquarter.aspx"
 COURSE = ARGV.shift
 LECTURE_NUM = (ARGV.shift || 1).to_i - 1
-FILENAME = ARGV.shift || "output.wmv"
+FILENAME = ARGV.shift || "output.mp4"
 
 puts "Downloading lecture #{LECTURE_NUM + 1} for course #{COURSE}"
 
@@ -19,6 +19,11 @@ agent = Mechanize.new
 agent.user_agent_alias = "Mac Safari"
 agent.robots = false
 page = agent.get(CURRENT_QUARTER_URL)
+
+# Load cookies if available
+if File.exist?("cookies")
+  agent.cookie_jar.load "cookies", session: true, format: :yaml
+end
 
 # Fill out the login form
 login_form = page.form("login")
@@ -37,6 +42,9 @@ if page.content =~ /Two-step authentication/
   login_form.otp = gets.strip
   page = agent.submit(login_form, login_form.buttons.first)
 end
+
+# Save cookies
+agent.cookie_jar.save_as "cookies", session: true, format: :yaml
 
 # Find the course number and visit the course page
 course_url = page.content  =~ /href=\"(.*#{COURSE}.*?)\"/i && (BASE_URL + $1)
