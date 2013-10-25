@@ -27,7 +27,7 @@ end
 page = agent.get(CURRENT_QUARTER_URL)
 
 # Fill out the login form
-if page.form("login")
+while (page.form("login") && !(page.content =~ /Two-step authentication/))
   login_form = page.form("login")
   print "SUNet ID: "
   login_form.username = gets.strip
