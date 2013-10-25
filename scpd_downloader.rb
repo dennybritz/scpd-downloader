@@ -27,7 +27,7 @@ end
 page = agent.get(CURRENT_QUARTER_URL)
 
 # Fill out the login form
-while page.form("login")
+if page.form("login")
   login_form = page.form("login")
   print "SUNet ID: "
   login_form.username = gets.strip
