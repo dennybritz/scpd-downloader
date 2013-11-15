@@ -24,8 +24,6 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-puts "Downloading lecture #{LECTURE_NUM + 1} for course #{COURSE}"
-
 agent = Mechanize.new
 agent.user_agent_alias = "Mac Safari"
 agent.robots = false
@@ -65,8 +63,14 @@ course_url = page.content  =~ /href=\"(.*#{COURSE}.*?)\"/i && (BASE_URL + $1)
 page = agent.get(course_url)
 
 # Visit the player page for the specified lecture
-page.links.select { |link| link.text == "SL"}.reverse[LECTURE_NUM].href =~ /javascript:openSL\((.*?)\);/ 
-coll, course, co, lecture, lectureDesc, authtype, playerType = *($1.gsub("\"","").split(","))
+lecture_link = page.links.select { |link| link.text == "SL"}.reverse[LECTURE_NUM]
+if lecture_link.nil?
+  $stderr.puts "No such lecture."
+  exit 1
+else
+  lecture_link.href =~ /javascript:openSL\((.*?)\);/ 
+  coll, course, co, lecture, lectureDesc, authtype, playerType = *($1.gsub("\"","").to_s.split(","))
+end
 
 # Get the SLP hash for authentication via JSON request
 json_response = agent.post("https://myvideosu.stanford.edu/OCE/GradCourseInfo.aspx/playSLVideo", 
