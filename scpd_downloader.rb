@@ -19,11 +19,8 @@ FILENAME = ARGV.shift || "output.mp4"
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: scpd_downloader.rb [course] [lecture_num] [filename] [options]"
-  opts.on("-u", "--user USER", "SUNet user id") do |user|
-    options[:user] = user
-  end
-  opts.on("-p", "--password PASSWORD", "SUNET password") do |pass|
-    options[:password] = pass
+  opts.on("-l", "--link", "Print raw video link instead of downloading the lecture.") do |links|
+    options[:link] = links
   end
 end.parse!
 
@@ -41,14 +38,12 @@ end
 page = agent.get(CURRENT_QUARTER_URL)
 
 # Fill out the login form
-if (page.form("login") && !(page.content =~ /Two-step authentication/))
+while (page.form("login") && !(page.content =~ /Two-step authentication/))
   login_form = page.form("login")
   print "SUNet ID: "
   login_form.username = gets.strip
-  # login_form.username = options[:user] || gets.strip
   print "SUNet Password: "
   login_form.password = STDIN.noecho(&:gets).strip
-  # login_form.password = options[:password] || STDIN.noecho(&:gets).strip
   login_form.checkboxes.first.checked = true
   puts "\nLogging in..."
   page = agent.submit(login_form, login_form.buttons.first)
@@ -82,4 +77,9 @@ page = agent.get(player_url)
 
 # Get the video URL and download using mimms
 video_url = page.content =~ /(mms:\/\/.*\.wmv)/ && $1
-system("ffmpeg -i #{video_url.gsub("mms","mmsh")} #{FILENAME}")
+video_url.gsub!("mms","mmsh")
+if options[:link]
+  puts video_url
+else
+  system("ffmpeg -i #{video_url} #{FILENAME}")
+end
