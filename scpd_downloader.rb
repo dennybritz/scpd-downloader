@@ -68,8 +68,8 @@ if lecture_link.nil?
   $stderr.puts "No such lecture."
   exit 1
 else
-  lecture_link.href =~ /javascript:openSL\((.*?)\);/ 
-  coll, course, co, lecture, lectureDesc, authtype, playerType = *($1.gsub("\"","").to_s.split(","))
+  lecture_link.href =~ /javascript:openSL\(\"(.*?)\"\);/ 
+  coll, course, co, lecture, lectureDesc, authtype, playerType = *($1.split("\",\""))
 end
 
 # Get the SLP hash for authentication via JSON request
@@ -80,6 +80,7 @@ player_url = "http://myvideosv.stanford.edu/player/slplayer.aspx?coll=#{coll}&co
 page = agent.get(player_url)
 
 # Get the video URL and download using mimms
+ 
 video_url = page.content =~ /(mms:\/\/.*\.wmv)/ && $1
 video_url.gsub!("mms","mmsh")
 if options[:link]
