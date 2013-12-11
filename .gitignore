@@ -1,2 +1,5 @@
 *.wmv
 cookies
+
+# bundler
+Gemfile.lock
