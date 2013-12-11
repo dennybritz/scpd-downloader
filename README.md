@@ -16,11 +16,11 @@ I wrote this script in a hurry, so there is absolutely no error handling. This m
 ## Usage
 
 ```shell
-./scpd_downloader.rb [course] [lecture_number] [filename]
+./bin/scpd_downloader [course] [lecture_number] [filename]
 ```
 For example:
 ```shell
-./scpd_downloader.rb cs229 1 cs229-01.mp4
+./bin/scpd_downloader cs229 1 cs229-01.mp4
 ```
 
 ## TODO
