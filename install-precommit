@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+# install pre-commit if not installed
+command -v pre-commit >/dev/null 2>&1 || {
+  echo >&2 "pre-commit not installed; Installing";
+  gem install pre-commit;
+  if [ $? -ne 0 ]; then
+    echo "Installing pre-commit failed; Aborting";
+    exit -1;
+  fi
+}
+
+# install pre-commit hook
+echo "Installing pre-commit hook";
+pre-commit install;
+git config "pre-commit.checks" "white_space, tabs, rubocop, merge_conflict";
+
+echo "Pre-commit hook installed! Thank you!"
