@@ -1,8 +1,4 @@
-#! /usr/bin/env ruby
-
-# Usage: ./scpd_downloader [course] [lecture_num] [filename]
-# Usage: ./scpd_downloader cs229 1 cs229-01.mp4
-
+# encoding: utf-8
 
 require "optparse"
 require "mechanize"
@@ -68,12 +64,12 @@ if lecture_link.nil?
   $stderr.puts "No such lecture."
   exit 1
 else
-  lecture_link.href =~ /javascript:openSL\(\"(.*?)\"\);/ 
-  coll, course, co, lecture, lectureDesc, authtype, playerType = *($1.split("\",\""))
+  lecture_link.href =~ /javascript:openSL\((.*?)\);/
+  coll, course, co, lecture, lectureDesc, authtype, playerType = *($1.gsub("\"","").to_s.split(","))
 end
 
 # Get the SLP hash for authentication via JSON request
-json_response = agent.post("https://myvideosu.stanford.edu/OCE/GradCourseInfo.aspx/playSLVideo", 
+json_response = agent.post("https://myvideosu.stanford.edu/OCE/GradCourseInfo.aspx/playSLVideo",
   {coGuidstr: co, collGuidstr: coll, desiredAuthType: "WA"}.to_json, "Content-Type" => "application/json;")
 slp = JSON(json_response.body)["d"]
 player_url = "http://myvideosv.stanford.edu/player/slplayer.aspx?coll=#{coll}&course=#{course}&co=#{co}&lecture=#{lecture}&authtype=#{authtype}&slp=#{slp}&sl=true"
