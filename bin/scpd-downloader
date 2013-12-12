@@ -5,19 +5,21 @@
 # Usage: ./scpd-downloader cs229 [1 cs229-01.mp4]
 
 # From mislav on stackoverflow:
-# http://stackoverflow.com/questions/2108727/which-in-ruby-checking-if-program-exists-in-path-from-ruby
+# http://stackoverflow.com/questions/2108727/which-in-ruby-checking-if-program
+# -exists-in-path-from-ruby
 # Cross-platform way of finding an executable in the $PATH.
 #
 #   which('ruby') #=> /usr/bin/ruby
 def which(cmd)
   exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
   ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
-    exts.each { |ext|
+    exts.each do |ext|
       exe = File.join(path, "#{cmd}#{ext}")
       return exe if File.executable? exe
-    }
+    end
   end
-  return nil
+
+  nil
 end
 
 if RUBY_VERSION < '1.9.3'
@@ -26,9 +28,12 @@ if RUBY_VERSION < '1.9.3'
 end
 
 if which('ffmpeg').nil?
-  puts 'scpd-downloader requires ffmpeg to be installed. On Mac, run `brew install ffmpeg` and try again'
+  puts 'scpd-downloader requires ffmpeg to be installed. On Mac, run ' +
+    '`brew install ffmpeg` and try again'
   exit(-1)
 end
 
 $LOAD_PATH.unshift(File.dirname(File.realpath(__FILE__)) + '/../lib')
-require 'downloader'
+
+require 'SCPDDownloader'
+SCPDDownloader.run
