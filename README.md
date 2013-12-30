@@ -15,13 +15,21 @@ I wrote this script in a hurry, so there isn't much error handling. This means i
 
 ## Usage
 
-To download a lecture to a file: `./scpd_downloader [course] [lecture_number] [filename]`
+To download a lecture to a file: 
+
+```shell
+./scpd_downloader [course] [lecture_number] [filename]`
+```
 
 ```shell
 ./scpd_downloader cs229 1 cs229-01.mp4
 ```
 
-Print the link for a lecture video to download it with another application: `./scpd_downloader [course] [lecture_number] [filename]`
+Print the link for a lecture video to download it with another application: 
+
+```shell
+./scpd_downloader --link [course] [lecture_number]`
+```
 
 ```shell
 ./scpd_downloader --link cs229 1
