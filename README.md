@@ -18,7 +18,7 @@ I wrote this script in a hurry, so there isn't much error handling. This means i
 To download a lecture to a file: 
 
 ```shell
-./scpd_downloader [course] [lecture_number] [filename]`
+./scpd_downloader [course] [lecture_number] [filename]
 ```
 
 ```shell
@@ -28,7 +28,7 @@ To download a lecture to a file:
 Print the link for a lecture video to download it with another application: 
 
 ```shell
-./scpd_downloader --link [course] [lecture_number]`
+./scpd_downloader --link [course] [lecture_number]
 ```
 
 ```shell
