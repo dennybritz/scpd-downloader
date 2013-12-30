@@ -1,8 +1,0 @@
-#$ -cwd
-#$ -j y
-#$ -S /bin/bash
-
-cat $PE_HOSTFILE
-echo "running with" echo $* 
-
-avconv $*

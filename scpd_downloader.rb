@@ -1,4 +1,4 @@
-# encoding: utf-8
+#! /usr/bin/env ruby
 
 require "optparse"
 require "mechanize"
@@ -7,11 +7,8 @@ require "io/console"
 
 BASE_URL = "https://myvideosu.stanford.edu/"
 CURRENT_QUARTER_URL = "https://myvideosu.stanford.edu/oce/currentquarter.aspx"
-COURSE = ARGV.shift
-LECTURE_NUM = (ARGV.shift || 1).to_i - 1
-FILENAME = ARGV.shift || "output.mp4"
 
-# Parse command line options
+# Parse command options
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: scpd_downloader.rb [course] [lecture_num] [filename] [options]"
@@ -20,15 +17,21 @@ OptionParser.new do |opts|
   end
 end.parse!
 
+# Parse command argument
+COURSE = ARGV.shift
+LECTURE_NUM = (ARGV.shift || 1).to_i - 1
+FILENAME = ARGV.shift || "output.mp4"
+
 agent = Mechanize.new
 agent.user_agent_alias = "Mac Safari"
 agent.robots = false
 
 # Load cookies if available
 if File.exist?("cookies")
-  agent.cookie_jar.load "cookies", session: true, format: :yaml
+  agent.cookie_jar.load("cookies", :session => true, :format => :yaml)
 end
 
+# Fetch the page
 page = agent.get(CURRENT_QUARTER_URL)
 
 # Fill out the login form
@@ -52,16 +55,21 @@ if page.content =~ /Two-step authentication/
 end
 
 # Save cookies
-agent.cookie_jar.save_as "cookies", session: true, format: :yaml
+agent.cookie_jar.save_as("cookies", :session => true, :format => :yaml)
 
 # Find the course number and visit the course page
 course_url = page.content  =~ /href=\"(.*#{COURSE}.*?)\"/i && (BASE_URL + $1)
-page = agent.get(course_url)
+if $1
+  page = agent.get(course_url)
+else
+  $stderr.puts "course #{COURSE} was not found on #{CURRENT_QUARTER_URL}"
+  exit 1
+end
 
 # Visit the player page for the specified lecture
 lecture_link = page.links.select { |link| link.text == "SL"}.reverse[LECTURE_NUM]
 if lecture_link.nil?
-  $stderr.puts "No such lecture."
+  $stderr.puts "lecture ${LECTURE_NUM} was not found"
   exit 1
 else
   lecture_link.href =~ /javascript:openSL\((.*?)\);/
@@ -70,17 +78,18 @@ end
 
 # Get the SLP hash for authentication via JSON request
 json_response = agent.post("https://myvideosu.stanford.edu/OCE/GradCourseInfo.aspx/playSLVideo",
-  {coGuidstr: co, collGuidstr: coll, desiredAuthType: "WA"}.to_json, "Content-Type" => "application/json;")
+  {:coGuidstr => co, :collGuidstr => coll, :desiredAuthType => "WA"}.to_json, 
+  "Content-Type" => "application/json;")
 slp = JSON(json_response.body)["d"]
-player_url = "http://myvideosv.stanford.edu/player/slplayer.aspx?coll=#{coll}&course=#{course}&co=#{co}&lecture=#{lecture}&authtype=#{authtype}&slp=#{slp}&sl=true"
+player_url = "http://myvideosv.stanford.edu/player/slplayer.aspx?" + 
+  "coll=#{coll}&course=#{course}&co=#{co}&lecture=#{lecture}&authtype=#{authtype}&slp=#{slp}&sl=true"
 page = agent.get(player_url)
 
-# Get the video URL and download using mimms
- 
+# Get the video URL and download using avconv
 video_url = page.content =~ /(mms:\/\/.*\.wmv)/ && $1
 video_url.gsub!("mms","mmsh")
 if options[:link]
   puts video_url
 else
-  system("ffmpeg -i #{video_url} #{FILENAME}")
+  system("avconv -y -i #{video_url} -strict experimental #{FILENAME}")
 end

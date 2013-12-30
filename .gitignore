@@ -1,5 +1,6 @@
 *.wmv
+*.mp4
 cookies
-
-# bundler
+cluster/
+.ruby-version
 Gemfile.lock

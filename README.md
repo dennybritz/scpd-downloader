@@ -2,25 +2,29 @@
 
 Downloads lecture videos from [https://myvideosu.stanford.edu/oce/currentquarter.aspx](https://myvideosu.stanford.edu/oce/currentquarter.aspx). **You need a valid Stanford SUNet ID.** Supports two-step authentication. Videos are streamed, so downloading lectures may take a while.
 
-I wrote this script in a hurry, so there is absolutely no error handling. This means it'll crash if you give it a wrong lecture number, course, or login credentials. Garbage in, garbage out. Pull requests are welcome.
+I wrote this script in a hurry, so there isn't much error handling. This means it may crash if you give it a wrong lecture number, course, or login credentials. Garbage in, garbage out. Pull requests are welcome.
 
 **Distributing SCPD lectures is against the terms of service. This script is for private use only!**
 
 ## System requirements
 
-- Ruby 1.9.3 or higher (I recommend using [rbenv](https://github.com/sstephenson/rbenv))
+- Ruby >= 1.9.3 (I recommend using [rbenv](https://github.com/sstephenson/rbenv))
 - JSON gem (`gem install json`)
 - [Mechanize gem](http://mechanize.rubyforge.org/) (`gem install mechanize`)
-- [ffmpeg](http://www.ffmpeg.org/) (`brew install ffmpeg`)
+- [avconv](libav.org) (`brew install libav`)
 
 ## Usage
 
+To download a lecture to a file: `./scpd_downloader [course] [lecture_number] [filename]`
+
 ```shell
-./bin/scpd_downloader [course] [lecture_number] [filename]
+./scpd_downloader cs229 1 cs229-01.mp4
 ```
-For example:
+
+Print the link for a lecture video to download it with another application: `./scpd_downloader [course] [lecture_number] [filename]`
+
 ```shell
-./bin/scpd_downloader cs229 1 cs229-01.mp4
+./scpd_downloader --link cs229 1
 ```
 
 ## TODO
@@ -28,5 +32,3 @@ For example:
 - Error handling in case of:
   - Incorrect login credentials
   - Incorrect two-step authentication code
-  - Incorrect course name
-  - Incorrect lecture number
