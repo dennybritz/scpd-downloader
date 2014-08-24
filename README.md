@@ -1,3 +1,5 @@
+**Important: Stanford has changed their SCPD website and this tool no longer works.**
+
 # Stanford SCPD Lecture Downloader
 
 Downloads lecture videos from [https://myvideosu.stanford.edu/oce/currentquarter.aspx](https://myvideosu.stanford.edu/oce/currentquarter.aspx). **You need a valid Stanford SUNet ID.** Supports two-step authentication. Videos are streamed, so downloading lectures may take a while.
